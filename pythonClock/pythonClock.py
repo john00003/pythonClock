@@ -87,8 +87,11 @@ mainloop()
     #if so, add clock to the list
     #else, make a new struct with clock in the list
 #when main loop goes to provide each clock with the time in ns, it will instead provide TimeManager with the time in ns
+#time manager will calculate integer value of unit of time from ns to provide to each clock
+    #e.g., calculates the current second, current hour, etc.
+    #TODO: find out how to change time provided by time manager to clock's specific timezone
 #TimeManager will loop through each clock in it's array, and provide it with the corresponding details
-#clock will have more than one TimeManager interacting with it, one for each of it's fields (e.g., second, min, hour)
+#clock will have more than one TimeManager interacting with it, one for each of it's fields (e.g., second time manager, min time manager, hour)
 
 #then, once main loop has looped through each TimeManager, all clocks are ready to be updated
 #main loop can update all of it's clocks
