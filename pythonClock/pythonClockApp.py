@@ -44,18 +44,41 @@ class PythonClockApp(ctk.CTk):
 
     def add_clock(self, clock, ns_per_units, ns_per_cycles):
         i = 0
+        # we make an array of the strings of the unit that each time manager tracks
+        time_manager_tags = [manager.unit for manager in self.time_managers]
         for field in clock.time_fields:
-            index = -1
+            index_of_match = -1
             try:
-                # if this time manager already exists, we append our clock to its clocks list
-                index = self.time_managers.index(field)
-                self.time_managers[index].clocks.append(clock)
+                # we look for the unit the clock uses in the list of time manager tags
+                # if this time manager already exists, we append our clock to the time manager's clocks list
+                index_of_match = time_manager_tags.index(field)
+                self.time_managers[index_of_match].clocks.append(clock)
             except ValueError:
                 # add a new time manager
                 # TODO: sort time managers?
                 self.time_managers.append(timeManager.TimeManager(field, ns_per_units[i], ns_per_cycles[i], [clock]))
             i += 1
         self.clocks.append(clock)
+        print(self.time_managers)
+
+    def delete_clock(self, clock):
+        time_manager_tags = [manager.unit for manager in self.time_managers]
+
+        # remove clock from timeManager clock lists, delete timeManager if now unused
+        for field in clock.time_fields:
+            index = time_manager_tags.index(field)
+            self.time_managers[index].clocks.remove(clock)
+            if len(self.time_managers[index].clocks) == 0:
+                manager_to_remove = self.time_managers.pop(index)
+                time_manager_tags.remove(manager_to_remove.unit)
+                del manager_to_remove
+
+        # delete all children
+        for child in clock.winfo_children():
+            child.destroy()
+        del clock
+
+
 
 
 app = PythonClockApp()
