@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 import clockFrame
-import newClockMenu
+import homeMenu
 import analogClock
 import digitalClock
 import timeManager
@@ -19,7 +19,7 @@ class PythonClockApp(ctk.CTk):
         self.time_managers = []
         self.clocks = []
 
-        self.menu = newClockMenu.NewClockMenu(master=self)
+        self.menu = homeMenu.HomeMenu(master=self)
         clock1 = clockFrame.ClockFrame(master=self, clock='analog')
         clock2 = clockFrame.ClockFrame(master=self, clock='digital')
 
@@ -59,7 +59,6 @@ class PythonClockApp(ctk.CTk):
                 self.time_managers.append(timeManager.TimeManager(field, ns_per_units[i], ns_per_cycles[i], [clock]))
             i += 1
         self.clocks.append(clock)
-        print(self.time_managers)
 
     def delete_clock(self, clock):
         time_manager_tags = [manager.unit for manager in self.time_managers]
